@@ -1,7 +1,19 @@
+import styled from '@emotion/styled';
 import { Navbar } from 'react-bootstrap';
-const Header = () => {
+
+const StyledHeader = styled.header(({bannerFullScreen}) => ({
+   ...bannerFullScreen && {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 2,
+   }
+}));
+
+const Header = ({bannerFullScreen}) => {
    return (
-      <header>
+      <StyledHeader bannerFullScreen={bannerFullScreen}>
          <Navbar>
             <Navbar.Brand>Example</Navbar.Brand>
             <Navbar.Toggle />
@@ -15,7 +27,7 @@ const Header = () => {
                </ul>
             </Navbar.Collapse>
          </Navbar>
-      </header>
+      </StyledHeader>
    );
 };
 
