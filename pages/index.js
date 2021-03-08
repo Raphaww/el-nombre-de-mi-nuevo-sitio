@@ -12,8 +12,8 @@ export default function Home({landings}) {
       <ul className="list-unstyled">
       {landings.map(landing => (
         <li key={landing.id}>
-          <Link href={`/landings/${landing.uri}`}>
-            <a>{landing.title && landing.title !== " " ? landing.title : "[click]"}</a>
+          <Link href={`/landings/${landing.id}`}>
+            <a>{landing.name && landing.name !== " " ? landing.name : "[click]"}</a>
           </Link>
         </li>
       ))}

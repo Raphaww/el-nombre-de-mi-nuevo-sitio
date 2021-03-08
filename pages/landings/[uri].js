@@ -7,24 +7,29 @@ export default function Banner({ landingData }) {
    const base = '//res.cloudinary.com/itermotus/';
    const bucket = 'hotel';
    return (
-      <Layout bannerFullScreen={landingData.bannerProps.bannerFullScreen}>
+      <Layout bannerFullScreen={landingData.bannerFullScreen}>
          <Head>
-            <title>{landingData.title}</title>
+            <title>{landingData.name}</title>
          </Head>
          <Stage
-            keepAspectRatio={landingData.bannerProps.keepAspectRatio}
-            bannerFullWidth={landingData.bannerProps.bannerFullWidth}
-            bannerFullScreen={landingData.bannerProps.bannerFullScreen}
+            keepAspectRatio={landingData.bannerKeepAspectRatio}
+            bannerFullWidth={landingData.bannerFullWidth}
+            bannerFullScreen={landingData.bannerFullScreen}
          >
-            <Carousel
-               keepAspectRatio={landingData.bannerProps.keepAspectRatio}
-               bannerFullScreen={landingData.bannerProps.bannerFullScreen}
-               bannerFullScreenTheme={landingData.bannerProps.bannerFullScreenTheme}
-               hasExtraInfo
-               photos={landingData.photos}
-               base={base}
-               bucket={bucket}
-            />
+            {landingData.Banners && landingData.Banners.items.map(banner => (
+               <Carousel
+                  key={banner.id}
+                  keepAspectRatio={landingData.bannerKeepAspectRatio}
+                  bannerFullScreen={landingData.bannerFullScreen}
+                  {... landingData.bannerFullScreenTheme && {
+                     bannerFullScreenTheme: landingData.bannerFullScreenTheme
+                  }}
+                  hasExtraInfo
+                  photos={banner.BannerImages.items.map(item => item.image)}
+                  base={base}
+                  bucket={bucket}
+               />
+            ))}
          </Stage>
       </Layout>
    );
