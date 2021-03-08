@@ -1,5 +1,6 @@
 import Amplify from '@aws-amplify/core';
 import Head from 'next/head';
+import { useRouter } from 'next/router'
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
 import { Carousel, Stage } from '../../partials';
@@ -7,8 +8,14 @@ import awsConfigure from '../../awsConfigure';
 Amplify.configure({...awsConfigure, ssr: true});
 
 export default function Banner({ landingData }) {
+   const router = useRouter()
    const base = '//res.cloudinary.com/itermotus/';
    const bucket = 'hotel';
+   if(router.isFallback){
+      return (
+         <div>Loading...</div>
+      );
+   }
    return (
       <Layout bannerFullScreen={landingData.bannerFullScreen}>
          <Head>
@@ -41,12 +48,13 @@ export default function Banner({ landingData }) {
 
 export async function getStaticPaths() {
    const paths = await getAllLandingsIds();
+   //para staticPaths se pasan como params
    const newPaths = paths.map(p => ({
       params: { uri: p }
    }));
    return {
       paths: newPaths,
-      fallback: false
+      fallback: true
    };
 }
 
@@ -55,6 +63,7 @@ export async function getStaticProps({ params }) {
    return {
       props: {
          landingData
-      }
+      },
+      revalidate: 1
    };
 }
