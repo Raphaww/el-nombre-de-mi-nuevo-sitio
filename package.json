@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@aws-amplify/api": "^3.2.25",
+    "@aws-amplify/core": "^3.8.17",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "bootstrap": "^4.6.0",

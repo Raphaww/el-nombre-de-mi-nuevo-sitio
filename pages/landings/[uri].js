@@ -1,11 +1,7 @@
-import Amplify from 'aws-amplify';
 import Head from 'next/head';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
 import { Carousel, Stage } from '../../partials';
-import aws_exports from '../../aws-exports';
-
-Amplify.configure(aws_exports);
 
 export default function Banner({ landingData }) {
    const base = '//res.cloudinary.com/itermotus/';

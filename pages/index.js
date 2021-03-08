@@ -1,11 +1,7 @@
-import Amplify from 'aws-amplify';
 import Layout from '../components/layout';
 import Head from 'next/head';
 import Link from 'next/link';
 import { getAllLandings } from '../lib/landings';
-import aws_exports from '../aws-exports';
-
-Amplify.configure(aws_exports);
 
 export default function Home({landings}) {
   return (
