@@ -1,7 +1,10 @@
+import Amplify from '@aws-amplify/core';
 import Head from 'next/head';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
 import { Carousel, Stage } from '../../partials';
+import awsConfigure from '../../awsConfigure';
+Amplify.configure({...awsConfigure, ssr: true});
 
 export default function Banner({ landingData }) {
    const base = '//res.cloudinary.com/itermotus/';
@@ -36,15 +39,18 @@ export default function Banner({ landingData }) {
 
 }
 
-export async function getServerSidePaths() {
+export async function getStaticPaths() {
    const paths = await getAllLandingsIds();
+   const newPaths = paths.map(p => ({
+      params: { uri: p }
+   }));
    return {
-      paths,
+      paths: newPaths,
       fallback: false
    };
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticProps({ params }) {
    const landingData = await getLandingData(params.uri);
    return {
       props: {

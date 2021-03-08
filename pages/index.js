@@ -1,7 +1,10 @@
+import Amplify from '@aws-amplify/core';
 import Layout from '../components/layout';
 import Head from 'next/head';
 import Link from 'next/link';
 import { getAllLandings } from '../lib/landings';
+import awsConfigure from '../awsConfigure';
+Amplify.configure({...awsConfigure, ssr: true});
 
 export default function Home({landings}) {
   return (
@@ -22,7 +25,7 @@ export default function Home({landings}) {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const landings = await getAllLandings();
   return {
      props: {
