@@ -5,7 +5,7 @@ export const listLandings = /* GraphQL */ `
       listLandings(limit: $limit) {
          items {
             id
-            name
+            title
             uri
          }
       }
@@ -15,26 +15,31 @@ export const listLandings = /* GraphQL */ `
 export const getLanding = /* GraphQL */`
    query GetLanding($id: ID!) {
       getLanding(id: $id) {
-         name
+         title
          uri
          id
          bannerKeepAspectRatio
          bannerFullScreenTheme
          bannerFullWidth
          bannerFullScreen
-         Banners {
+         images {
+            items {
+               image {
+                  path
+                  title
+                  id
+               }
+            }
+         }
+         banners {
             items {
                id
                title
                subTitle
-               BannerImages {
-                  items {
-                     image {
-                        path
-                        title
-                        id
-                     }
-                  }
+               image {
+                  id
+                  path
+                  title
                }
             }
          }

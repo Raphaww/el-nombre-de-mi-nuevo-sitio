@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
-import isPropValid from '@emotion/is-prop-valid'
 import { Carousel } from 'react-bootstrap';
 import variables from '../styled/variables';
 
 const StyledCarousel = styled(Carousel, {
-   shouldForwardProp: prop => isPropValid(prop)
-   && prop !== 'keepAspectRatio'
+   shouldForwardProp: prop => 
+   prop !== 'keepAspectRatio'
    && prop !== 'hasExtraInfo'
    && prop !== 'bannerFullScreen'
 })`
@@ -65,14 +64,17 @@ const StyledCarousel = styled(Carousel, {
    }
 `;
 const StylesCarouselItem = styled(Carousel.Item, {
-   shouldForwardProp: prop => isPropValid(prop)
-   && prop !== 'bannerFullScreenTheme'
+   shouldForwardProp: prop =>
+   prop !== 'bannerFullScreenTheme'
 })((props) => ({
    height: '100%',
    backgroundPosition: '50%',
    backgroundSize: 'cover',
-   ...(props.bannerFullScreenTheme === 'light'
-   || props.bannerFullScreenTheme === 'dark') && {
+   // ...props.path && {
+   //    backgroundImage: `url(${props.path}) !important`
+   // },
+   ...(props.bannerFullScreenTheme === 'LIGHT'
+   || props.bannerFullScreenTheme === 'DARK') && {
       '&:before': {
          content: '""',
          position: 'absolute',
@@ -80,13 +82,13 @@ const StylesCarouselItem = styled(Carousel.Item, {
          left: 0,
          right: 0,
          bottom: 0,
-         ...props.bannerFullScreenTheme === 'light' && {
+         ...props.bannerFullScreenTheme === 'LIGHT' && {
             background: `-moz-linear-gradient(top,  rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 100%)`,
             background: `-webkit-linear-gradient(top,  rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 100%)`,
             background: `linear-gradient(to bottom,  rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 100%)`,
             filter: `progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 )`
          },
-         ...props.bannerFullScreenTheme === 'dark' && {
+         ...props.bannerFullScreenTheme === 'DARK' && {
             background: '-moz-linear-gradient(top,  rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 100%)',
             background: '-webkit-linear-gradient(top,  rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 100%)',
             background: 'linear-gradient(to bottom,  rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 100%)',
@@ -96,33 +98,34 @@ const StylesCarouselItem = styled(Carousel.Item, {
    }
 }));
 
-const BannerItem = styled.div`
-   height: 100%;
-   background-position: 50%;
-   background-size: cover;
-   ${props => props.path
-      ? `
-         background-image: url(${props.path})
-      ` : ''}
-`;
-
-const carousel = ({photos, base, bucket, keepAspectRatio, hasExtraInfo, bannerFullScreen, bannerFullScreenTheme}) => {
+const carousel = ({images, banners, base, bucket, keepAspectRatio, hasExtraInfo, bannerFullScreen, bannerFullScreenTheme}) => {
    return (
       <StyledCarousel
-         controls={photos.length > 1}
+         controls={false}
+         indicators={images && images.length > 1 || banners && banners.length > 0}
          fade
          keepAspectRatio={keepAspectRatio}
          hasExtraInfo={hasExtraInfo}
          bannerFullScreen={bannerFullScreen}
       >
-         <StylesCarouselItem bannerFullScreenTheme={bannerFullScreenTheme}>
-            {photos.map((photo, i) => (
-               <BannerItem
-                  key={i}
-                  path={`${base}f_auto,w_1280,h_600,b_black,o_70,c_fill/${bucket}/${photo.path}`}
-               />
-            ))}
-         </StylesCarouselItem>
+         {banners && banners.map((banner) => (
+            <StylesCarouselItem
+               key={banner.id}
+               bannerFullScreenTheme={bannerFullScreenTheme}
+               style={{backgroundImage: `url(${base}f_auto,w_1280,h_600,b_black,o_70,c_fill/${bucket}/${banner.image.path})`}}
+            >
+               <Carousel.Caption>
+                  <h3>{banner.title}</h3>
+               </Carousel.Caption>
+            </StylesCarouselItem>
+         ))}
+         {images && images.map((image) => (
+            <StylesCarouselItem
+               key={image.id}
+               bannerFullScreenTheme={bannerFullScreenTheme}
+               style={{backgroundImage: `url(${base}f_auto,w_1280,h_600,b_black,o_70,c_fill/${bucket}/${image.path})`}}
+            />
+         ))}
       </StyledCarousel>
    );
 };

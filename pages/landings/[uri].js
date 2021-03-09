@@ -19,27 +19,35 @@ export default function Banner({ landingData }) {
    return (
       <Layout bannerFullScreen={landingData.bannerFullScreen}>
          <Head>
-            <title>{landingData.name}</title>
+            <title>{landingData.title}</title>
          </Head>
          <Stage
             keepAspectRatio={landingData.bannerKeepAspectRatio}
             bannerFullWidth={landingData.bannerFullWidth}
             bannerFullScreen={landingData.bannerFullScreen}
          >
-            {landingData.Banners && landingData.Banners.items.map(banner => (
+            {(landingData.banners || landingData.images) && (
                <Carousel
-                  key={banner.id}
                   keepAspectRatio={landingData.bannerKeepAspectRatio}
                   bannerFullScreen={landingData.bannerFullScreen}
                   {... landingData.bannerFullScreenTheme && {
                      bannerFullScreenTheme: landingData.bannerFullScreenTheme
                   }}
                   hasExtraInfo
-                  photos={banner.BannerImages.items.map(item => item.image)}
+                  {...landingData.banners
+                     && landingData.banners.items.length > 0
+                     && {
+                     banners: landingData.banners.items
+                  }}
+                  {...landingData.images
+                     && landingData.images.items.length > 0
+                     && {
+                     images: landingData.images.items.map(item => item.image)
+                  }}
                   base={base}
                   bucket={bucket}
                />
-            ))}
+            )}
          </Stage>
       </Layout>
    );
@@ -49,8 +57,8 @@ export default function Banner({ landingData }) {
 export async function getStaticPaths() {
    const paths = await getAllLandingsIds();
    //para staticPaths se pasan como params
-   const newPaths = paths.map(p => ({
-      params: { uri: p }
+   const newPaths = paths.map(id => ({
+      params: { uri: id }
    }));
    return {
       paths: newPaths,

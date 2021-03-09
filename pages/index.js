@@ -16,7 +16,7 @@ export default function Home({landings}) {
       {landings.map(landing => (
         <li key={landing.id}>
           <Link href={`/landings/${landing.id}`}>
-            <a>{landing.name && landing.name !== " " ? landing.name : "[click]"}</a>
+            <a>{landing.title && landing.title !== " " ? landing.title : "[click]"}</a>
           </Link>
         </li>
       ))}
@@ -30,6 +30,7 @@ export async function getStaticProps() {
   return {
      props: {
         landings
-     }
+     },
+     revalidate: 1
   };
 }
