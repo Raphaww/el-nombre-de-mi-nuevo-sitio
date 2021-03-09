@@ -48,7 +48,7 @@ export default function Banner({ landingData }) {
                   bucket={bucket}
                />
             )}
-            {(!landingData.baners || landingData.banners.items.length === 0)
+            {(!landingData.banners || landingData.banners.items.length === 0)
                && (
                   <BannerInfo>
                      <h3>{landingData.title}</h3>
