@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router'
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
-import { Carousel, Stage } from '../../partials';
+import { Carousel, Stage, BannerInfo } from '../../partials';
 import awsConfigure from '../../awsConfigure';
 Amplify.configure({...awsConfigure, ssr: true});
 
@@ -48,6 +48,13 @@ export default function Banner({ landingData }) {
                   bucket={bucket}
                />
             )}
+            {(!landingData.baners || landingData.banners.items.length === 0)
+               && (
+                  <BannerInfo>
+                     <h3>{landingData.title}</h3>
+                  </BannerInfo>
+               )
+            }
          </Stage>
       </Layout>
    );
