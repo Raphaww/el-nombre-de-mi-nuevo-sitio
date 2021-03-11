@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { Carousel } from 'react-bootstrap';
+import { Carousel, Row, Col, Badge } from 'react-bootstrap';
+import BannerInfo from './BannerInfo';
 import variables from '../styled/variables';
 
 const StyledCarousel = styled(Carousel, {
@@ -34,20 +35,8 @@ const StyledCarousel = styled(Carousel, {
       z-index: 1 !important;
       margin-bottom: 0;
    }
-   @media (min-width: 768px){
-      ${props => props.keepAspectRatio && `
-         position: absolute;
-         top: 0;
-         left: 0;
-         right: 0;
-         height: 100%;
-         width: 100%;
-      `}
-      ${props => props.bannerFullScreen && `
-         min-height: 360px;
-      `
-   }
-   @media(max-width: 767px){
+
+   @media (max-width: 767px){
       background-color: ${variables.bgcolorStage};
       margin-bottom: 1rem;
       .carousel-inner {
@@ -61,6 +50,19 @@ const StyledCarousel = styled(Carousel, {
       ${props => props.keepAspectRatio && `
       height: 200px;
       `}
+   }
+   @media (min-width: 768px){
+      ${props => props.keepAspectRatio && `
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 100%;
+         width: 100%;
+      `}
+      ${props => props.bannerFullScreen && `
+         min-height: 360px;
+      `
    }
 `;
 const StylesCarouselItem = styled(Carousel.Item, {
@@ -98,11 +100,23 @@ const StylesCarouselItem = styled(Carousel.Item, {
    }
 }));
 
-const carousel = ({images, banners, base, bucket, keepAspectRatio, hasExtraInfo, bannerFullScreen, bannerFullScreenTheme}) => {
+const carousel = (props) => {
+   const {
+      images,
+      banners,
+      base,
+      bucket,
+      keepAspectRatio,
+      hasExtraInfo,
+      bannerFullScreen,
+      bannerFullScreenTheme,
+      cols
+   } = props;
+
    return (
       <StyledCarousel
          controls={false}
-         indicators={images && images.length > 1 || banners && banners.length > 0}
+         indicators={images && images.length > 1 || banners && banners.length > 1}
          fade
          keepAspectRatio={keepAspectRatio}
          hasExtraInfo={hasExtraInfo}
@@ -114,9 +128,32 @@ const carousel = ({images, banners, base, bucket, keepAspectRatio, hasExtraInfo,
                bannerFullScreenTheme={bannerFullScreenTheme}
                style={{backgroundImage: `url(${base}f_auto,w_1280,h_600,b_black,o_70,c_fill/${bucket}/${banner.image.path})`}}
             >
-               <Carousel.Caption>
-                  <h3>{banner.title}</h3>
-               </Carousel.Caption>
+               <BannerInfo.Container keepAspectRatio={keepAspectRatio}>
+                  <Row>
+                     <Col {...cols}>
+                        <BannerInfo>
+                           {banner.label && (
+                              <Badge
+                                 variant='primary'
+                                 className="text-uppercase"
+                              >
+                                 {banner.label}
+                              </Badge>
+                           )}
+                           {banner.title && (
+                              <BannerInfo.Title>
+                                 {banner.title}
+                              </BannerInfo.Title>
+                           )}
+                           {banner.subTitle && (
+                              <BannerInfo.Subtitle>
+                                 {banner.subTitle}
+                              </BannerInfo.Subtitle>
+                           )}
+                        </BannerInfo>
+                     </Col>
+                  </Row>
+               </BannerInfo.Container>
             </StylesCarouselItem>
          ))}
          {images && images.map((image) => (

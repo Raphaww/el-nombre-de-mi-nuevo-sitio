@@ -1,6 +1,7 @@
 import Amplify from '@aws-amplify/core';
 import Head from 'next/head';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import { Row, Col } from 'react-bootstrap';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
 import { Carousel, Stage, BannerInfo } from '../../partials';
@@ -16,6 +17,22 @@ export default function Banner({ landingData }) {
          <div>Loading...</div>
       );
    }
+
+   const cols = {
+      xs: 12,
+      ...landingData.bannerKeepAspectRatio && {
+         sm: 9,
+         md: 12
+      },
+      ...landingData.widgetType === 'VERTICAL' && {
+         md: 6,
+         lg: 7,
+         xl: 8
+      },
+      ...landingData.widgetType === 'HORIZONTAL' && {
+         md: 12
+      }
+   };
    return (
       <Layout bannerFullScreen={landingData.bannerFullScreen}>
          <Head>
@@ -46,13 +63,31 @@ export default function Banner({ landingData }) {
                   }}
                   base={base}
                   bucket={bucket}
+                  cols={cols}
                />
             )}
             {(!landingData.banners || landingData.banners.items.length === 0)
                && (
-                  <BannerInfo>
-                     <h3>{landingData.title}</h3>
-                  </BannerInfo>
+                  <BannerInfo.Container
+                     keepAspectRatio={landingData.bannerKeepAspectRatio}
+                  >
+                     <Row>
+                        <Col {...cols}>
+                           <BannerInfo>
+                              {landingData.title && (
+                                 <BannerInfo.Title>
+                                    {landingData.title}
+                                 </BannerInfo.Title>
+                              )}
+                              {landingData.subTitle && (
+                                 <BannerInfo.subtitle>
+                                    {landingData.title}
+                                 </BannerInfo.subtitle>
+                              )}
+                           </BannerInfo>
+                        </Col>
+                     </Row>
+                  </BannerInfo.Container>
                )
             }
          </Stage>

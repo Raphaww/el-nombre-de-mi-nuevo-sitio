@@ -1,3 +1,4 @@
 export default {
-   bgcolorStage: '#FFF'
+   bgcolorStage: '#FFF',
+   lightColor: '#FFF'
 };
