@@ -1806,10 +1806,10 @@
     lodash "^4.17.20"
     lodash-es "^4.17.20"
 
-"@revenatium/revenatium-booker@^1.1.230":
-  version "1.1.230"
-  resolved "https://npm.pkg.github.com/download/@revenatium/revenatium-booker/1.1.230/9e6dadd59cd66342b63dbd36ab585eb44d2691140db54d9561ceaed872cb395a#b1cad7322e6ce0bba9f770ebfe53972953b2edcb"
-  integrity sha512-DjEXo0orzEvPOx8E9PFVuNr2jsu3HOgjqftRFmRoGmqo+k0a5vm3bzWcbhELBDiEfUYyIF+YVKs3U2TIKZyHEg==
+"@revenatium/revenatium-booker@^1.1.231":
+  version "1.1.231"
+  resolved "https://npm.pkg.github.com/download/@revenatium/revenatium-booker/1.1.231/c998fcb7aa24aeae65577111429f5c856d12b2b4720cc847ab66597c7ddf4d8d#95d619c45a933050b2ed87b45bf7232a2bdb745e"
+  integrity sha512-LyQCrs12ufLGn7+It7OxcfyTsbeKF4BjjxGPrk6jwr1R3LMMU+QnJ/Ks69qer/pvs8NOIKBT0YkeDOTn/XbxKw==
   dependencies:
     "@revenatium/revenatium-utils" "^1.1.84"
     "@revenatium/vibranium-common" "^1.1.265"
