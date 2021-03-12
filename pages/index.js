@@ -1,3 +1,4 @@
+import React from 'react';
 import Amplify from '@aws-amplify/core';
 import Layout from '../components/layout';
 import Head from 'next/head';

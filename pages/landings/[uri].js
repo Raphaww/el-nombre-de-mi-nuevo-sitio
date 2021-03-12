@@ -1,14 +1,19 @@
+import React from 'react';
 import Amplify from '@aws-amplify/core';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'react-bootstrap';
+import BookerComponent from '@revenatium/revenatium-booker/dist/components/Booker';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
-import { Carousel, Stage, BannerInfo } from '../../partials';
+import { Carousel, Stage, BannerInfo, WidgetContainer } from '../../partials';
 import awsConfigure from '../../awsConfigure';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+
 Amplify.configure({...awsConfigure, ssr: true});
 
-export default function Banner({ landingData }) {
+export default function Banner({ landingData, bookerProps }) {
    const router = useRouter()
    const base = '//res.cloudinary.com/itermotus/';
    const bucket = 'hotel';
@@ -90,6 +95,14 @@ export default function Banner({ landingData }) {
                   </BannerInfo.Container>
                )
             }
+            <WidgetContainer 
+               bannerFullScreen={landingData.bannerFullScreen}
+               keepAspectRatio={landingData.bannerKeepAspectRatio}
+               type={landingData.widgetType}
+               hasBanners={landingData.banners && landingData.banners.items.length > 0}
+            >
+               <BookerComponent {...bookerProps} />
+            </WidgetContainer>
          </Stage>
       </Layout>
    );
@@ -110,9 +123,37 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
    const landingData = await getLandingData(params.uri);
+   const bookerProps = {
+      selectedForm: 'HOTEL',
+      dateFormat: 'MMM D',
+      places: [
+         {"id": 1, "name": "Suites Sofia", "uri": "suites-sofia", "place": {id: 1, name: "Cancun", airportCode: "CUN"}}
+      ],
+      language: 'es-mx',
+      showCalendarIcon: true,
+      originEndPoint: 'https://api-packages-stage.revenatium.com/availability/airports',
+      quoteVersion: 'V1',
+      hotelForm: {
+         startDate: null,
+         endDate: null,
+         rooms: [{adults: 2, children: 0, childrenAges: []}],
+         maxAdults: 8,
+         maxRooms: 6,
+         maxChildren: 2,
+         minChildrenAge: 0,
+         maxChildrenAge: 12,
+         destination: [],
+         promotionCode: null,
+         hasPromotionCodeEnabled: true,
+         hasMultiDestination: false,
+         quoteRates: false,
+         hotelBookerRates: {}
+      }
+   };
    return {
       props: {
-         landingData
+         landingData,
+         bookerProps
       },
       revalidate: 1
    };
