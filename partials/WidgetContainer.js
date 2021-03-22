@@ -16,12 +16,11 @@ const StyledWidgetContainer = styled('div', {
          position: 'absolute',
          bottom: '1.25rem',
          left: 0,
-         right: 0
-      }
-   },
-   ...bannerFullScreen && {
-      '@media (min-width: 768px)': {
-         bottom: '3rem'
+         right: 0,
+         ...bannerFullScreen && {
+            bottom: '3rem'
+         }
+
       }
    },
    ...!keepAspectRatio && hasBanners && {
