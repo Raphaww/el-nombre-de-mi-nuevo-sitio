@@ -61,9 +61,10 @@ const StyledCarousel = styled(Carousel, {
          height: 100%;
          width: 100%;
       `}
-      ${props => props.bannerFullScreen && `
-         min-height: 360px;
-      `
+   }
+   ${props => props.bannerFullScreen && `
+      min-height: 360px;
+   `
    }
 `;
 const StylesCarouselItem = styled(Carousel.Item, {
