@@ -3,13 +3,14 @@ import { Container, Row, Col } from 'react-bootstrap';
 import styled from '@emotion/styled';
 import isPropValid from '@emotion/is-prop-valid';
 import variables from '../styled/variables';
+import enums from '../constants/enums';
 
 const StyledWidgetContainer = styled('div', {
    shouldForwardProp: prop =>
    isPropValid(prop)
    && prop !== 'type'
 })(({type, bannerFullScreen, keepAspectRatio, hasBanners}) => ({
-   ...type === 'HORIZONTAL' && {
+   ...type === enums.widgetType.HORIZONTAL && {
       backgroundColor: variables.widgetHorizontalbBgColor,
       '@media (min-width: 768px)': {
          position: 'absolute',
@@ -46,12 +47,12 @@ const StyledOuterContainer = styled('div', {
 const WidgetContainer = ({type, bannerFullScreen, keepAspectRatio, hasBanners, colWidth, children}) => {
    const cols = {
       xs: 12,
-      ...type === 'VERTICAL' && {
+      ...type === enums.widgetType.VERTICAL && {
          md: { span: 6, offset: 6 },
          lg: { span: 5, offset: 7 },
          xl: { span: 4, offset: 8 },
       },
-      ...type === 'HORIZONTAL' && colWidth > 0 && colWidth <= 12 && {
+      ...type === enums.widgetType.HORIZONTAL && colWidth > 0 && colWidth <= 12 && {
          lg: { span: colWidth }
       }
    };
@@ -66,7 +67,7 @@ const WidgetContainer = ({type, bannerFullScreen, keepAspectRatio, hasBanners, c
             <Container>
                <Row className='justify-content-center'>
                   <Col {...cols}>
-                     <div className={`itm-booker ${type === 'HORIZONTAL' && 'itm-booker-horizontal'}`}>
+                     <div className={`itm-booker ${type === enums.widgetType.HORIZONTAL && 'itm-booker-horizontal'}`}>
                         {children}
                      </div>
                   </Col>

@@ -3,9 +3,10 @@ import styled from '@emotion/styled';
 import { Container } from 'react-bootstrap';
 import isPropValid from '@emotion/is-prop-valid';
 import variables from '../styled/variables';
+import enums from '../constants/enums';
 
 const BannerInfoContext = createContext({
-   theme: 'DARK'
+   theme: enums.theme.DARK
 });
 
 function useBannerInfoContext() {
@@ -23,7 +24,7 @@ const StyledBannerInfo = styled('div', {
       isPropValid(prop)
       && prop !== 'theme'
 })(({theme}) => ({
-   ...theme && theme == 'DARK' && {
+   ...theme && theme == enums.theme.DARK && {
       color: variables.lightColor
    },
    '@media(min-width: 768px)': {
@@ -46,7 +47,7 @@ const StyledTitle = styled('div', {
    isPropValid(prop)
    && prop !== 'theme'
 })(({theme}) => ({
-   ...theme && theme == 'DARK' && {
+   ...theme && theme == enums.theme.DARK && {
       textShadow: '0 1px 1px rgba(0,0,0,0.3)'
    },
    fontSize: '1.5rem',
@@ -62,7 +63,7 @@ const StyledSubtitle = styled('div', {
    isPropValid(prop)
    && prop !== 'theme'
 })(({theme}) => ({
-   ...theme && theme == 'DARK' && {
+   ...theme && theme == enums.theme.DARK && {
       textShadow: '0 1px 1px rgba(0,0,0,0.3)'
    },
    fontSize: '1.25rem',
@@ -121,7 +122,7 @@ BannerInfo.Container = styled(Container,{
    }
 }));
 BannerInfo.defaultProps = {
-   theme: 'DARK'
+   theme: enums.theme.DARK
 };
 
 export default BannerInfo;

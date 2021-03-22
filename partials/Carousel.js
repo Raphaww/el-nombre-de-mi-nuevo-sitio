@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Carousel, Row, Col, Badge } from 'react-bootstrap';
 import BannerInfo from './BannerInfo';
 import variables from '../styled/variables';
+import enums from '../constants/enums';
 
 const StyledCarousel = styled(Carousel, {
    shouldForwardProp: prop => 
@@ -37,7 +38,7 @@ const StyledCarousel = styled(Carousel, {
    }
 
    @media (max-width: 767px){
-      background-color: ${variables.bgcolorStage};
+      background-color: ${variables.stageBgColor};
       margin-bottom: 1rem;
       .carousel-inner {
          overflow: visible;
@@ -75,8 +76,8 @@ const StylesCarouselItem = styled(Carousel.Item, {
    // ...props.path && {
    //    backgroundImage: `url(${props.path}) !important`
    // },
-   ...(props.bannerFullScreenTheme === 'LIGHT'
-   || props.bannerFullScreenTheme === 'DARK') && {
+   ...(props.bannerFullScreenTheme === enums.theme.LIGHT
+   || props.bannerFullScreenTheme === enums.theme.DARK) && {
       '&:before': {
          content: '""',
          position: 'absolute',
@@ -84,13 +85,13 @@ const StylesCarouselItem = styled(Carousel.Item, {
          left: 0,
          right: 0,
          bottom: 0,
-         ...props.bannerFullScreenTheme === 'LIGHT' && {
+         ...props.bannerFullScreenTheme === enums.theme.LIGHT && {
             background: `-moz-linear-gradient(top,  rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 100%)`,
             background: `-webkit-linear-gradient(top,  rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 100%)`,
             background: `linear-gradient(to bottom,  rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 100%)`,
             filter: `progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 )`
          },
-         ...props.bannerFullScreenTheme === 'DARK' && {
+         ...props.bannerFullScreenTheme === enums.theme.DARK && {
             background: '-moz-linear-gradient(top,  rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 100%)',
             background: '-webkit-linear-gradient(top,  rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 100%)',
             background: 'linear-gradient(to bottom,  rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 100%)',

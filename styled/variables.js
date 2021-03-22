@@ -1,6 +1,11 @@
+const lightColor = '#FFF';
+const darkColor = 'rgba(0, 0, 0, 0.9)';
+const lightBgColor = '#f8f9fa';
 export default {
-   bgcolorStage: '#FFF',
-   lightColor: '#FFF',
-   lightBgColor: '#f8f9fa',
-   widgetHorizontalbBgColor: 'transparent'
+   lightColor: lightColor,
+   lightBgColor: lightBgColor,
+   stageBgColor: lightBgColor,
+   widgetHorizontalbBgColor: 'transparent',
+   listItemBgColor: lightBgColor,
+   listItemColor: darkColor
 };

@@ -2,14 +2,19 @@ import React from 'react';
 import Amplify from '@aws-amplify/core';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 import BookerComponent from '@revenatium/revenatium-booker/dist/components/Booker';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
 import { Carousel, Stage, BannerInfo, WidgetContainer } from '../../partials';
 import awsConfigure from '../../awsConfigure';
+import enums from '../../constants/enums';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
+import Gallery from '../../partials/Gallery';
+import Text from '../../partials/Text';
+import Section from '../../partials/Section';
+import Media from '../../partials/Media';
 
 Amplify.configure({...awsConfigure, ssr: true});
 
@@ -29,15 +34,82 @@ export default function Banner({ landingData, bookerProps }) {
          sm: 9,
          md: 12
       },
-      ...landingData.widgetType === 'VERTICAL' && {
+      ...landingData.widgetType === enums.widgetType.VERTICAL && {
          md: 6,
          lg: 7,
          xl: 8
       },
-      ...landingData.widgetType === 'HORIZONTAL' && {
+      ...landingData.widgetType === enums.widgetType.HORIZONTAL && {
          md: 12
       }
    };
+   const drawComponent = (component, level = 0) => {
+      let result = null;
+      switch (component.type) {
+         case enums.componentType.TEXT:
+            result = (
+               <React.Fragment>
+                  {component.title && (
+                     <h4>{component.title}</h4>
+                  )}
+                  <Text content={component.content} />
+               </React.Fragment>
+            );
+            break;
+         case enums.componentType.ROW:
+            const cols = [];
+            {component.children
+            && component.children.items.map(child => {
+               cols.push(drawComponent(child, level + 1));
+            })}
+            result = (
+               <React.Fragment>
+                  {component.title && (
+                     <h4>{component.title}</h4>
+                  )}
+                  <Row>
+                     {cols}
+                  </Row>
+               </React.Fragment>
+               
+            );
+            break;
+         case enums.componentType.GALLERY:
+            if(component.images
+               && component.images.items.length > 0){
+               result = (
+                  <React.Fragment>
+                     {component.title && (
+                        <h4>{component.title}</h4>
+                     )}
+                     <Gallery images={component.images} base={base} bucket={bucket} />
+                  </React.Fragment>
+               );
+            }
+            break;
+         case enums.componentType.MEDIA:
+            result = (
+               <Media.Container>
+                  <Media>
+                     <Media.Image base={base} bucket={bucket} images={component.images} />
+                     <Media.Info title={component.title} content={component.content} />
+                  </Media>
+               </Media.Container>
+            );
+            break;
+         default:
+            break;
+      }
+      
+      return (
+         <Col key={component.id} {...component.size ? { lg: component.size } : null}>
+            <Section level={level}>
+               {result}
+            </Section>
+         </Col>
+      );
+   };
+
    return (
       <Layout bannerFullScreen={landingData.bannerFullScreen}>
          <Head>
@@ -104,6 +176,14 @@ export default function Banner({ landingData, bookerProps }) {
                <BookerComponent {...bookerProps} />
             </WidgetContainer>
          </Stage>
+         <Container>
+            {landingData.components
+            && landingData.components.items.map(component => (
+               <Row key={component.id}>
+                  {drawComponent(component)}
+               </Row>
+            ))}
+         </Container>
       </Layout>
    );
 

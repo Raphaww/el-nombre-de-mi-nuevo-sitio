@@ -12,7 +12,7 @@ export default styled.div(props => ({
    },
    '@media (min-width: 768px)': {
       minHeight: '360px', // para conservar tamaño mínimo en w horizontal
-      backgroundColor: variables.bgcolorStage,
+      backgroundColor: variables.stageBgcolor,
       ...props.keepAspectRatio && {
          minHeight: '360px',
          ...!props.bannerFullWidth && {
@@ -42,7 +42,7 @@ export default styled.div(props => ({
       }
    },
    ...props.solid && {
-      backgroundColor: variables.bgcolorStage,
+      backgroundColor: variables.stageBgcolor,
       minHeight: 0
    },
    ...props.keepAspectRatio && {

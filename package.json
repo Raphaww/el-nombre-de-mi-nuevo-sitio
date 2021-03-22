@@ -17,6 +17,8 @@
     "@revenatium/vibranium-common": "^1.1.165",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "dompurify": "^2.2.7",
+    "jsdom": "^16.5.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.18.1",
     "next": "^9.5.5",
