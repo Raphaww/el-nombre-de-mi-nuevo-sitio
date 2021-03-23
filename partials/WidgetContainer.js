@@ -23,11 +23,17 @@ const StyledWidgetContainer = styled('div', {
 
       }
    },
-   ...!keepAspectRatio && hasBanners && {
+   ...!keepAspectRatio && !hasBanners ? {
       '@media (max-width: 767px)': {
-         paddingTop: '200px'
+         marginTop: '5rem',
+         padding: '1.25rem 1.25rem 2.25rem'
       }
-   }
+   } : !keepAspectRatio && hasBanners ? {
+      '@media (max-width: 767px)': {
+         paddingTop: '200px',
+         paddingBottom: '2.25rem'
+      }
+   }: null
 }));
 
 const StyledOuterContainer = styled('div', {

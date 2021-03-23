@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import variables from '../styled/variables';
 
-export default styled.div(props => ({
+const Stage = styled.div(props => ({
    margin: '0 auto 2rem',
    position: 'relative',
    minHeight: '200px',
@@ -49,3 +49,5 @@ export default styled.div(props => ({
       backgroundColor: '#FFF'
    },
 }));
+
+export default Stage;

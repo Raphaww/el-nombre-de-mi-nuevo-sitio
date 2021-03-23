@@ -102,7 +102,7 @@ const StylesCarouselItem = styled(Carousel.Item, {
    }
 }));
 
-const carousel = (props) => {
+const NewCarousel = (props) => {
    const {
       images,
       banners,
@@ -169,4 +169,4 @@ const carousel = (props) => {
    );
 };
 
-export default carousel;
+export default NewCarousel;

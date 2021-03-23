@@ -108,6 +108,8 @@ BannerInfo.Subtitle = Subtitle;
 BannerInfo.Container = styled(Container,{
    shouldForwardProp: prop =>
    prop !== 'keepAspectRatio'
+   && prop !== 'isTop'
+   && prop !== 'bannerFullScreen'
 })((props) => ({
    position: 'relative',
    ...props.keepAspectRatio && {
@@ -115,9 +117,24 @@ BannerInfo.Container = styled(Container,{
       paddingBottom: 0,
       '@media(max-width: 767px)': {
          position: 'absolute',
-         bottom: '2rem',
          left: 0,
-         right: 0
+         right: 0,
+         ...props.isTop ? {
+            top: 0,
+            height: props.bannerFullScreen ? '360px' : '270px',
+            '.row':{
+               bottom: '2rem',
+               position: 'absolute',
+               width: '100%'
+            }
+         } : {
+            bottom: '2rem'
+         }
+      },
+      ...props.isTop && !props.bannerFullScreen && {
+         '@media (max-width: 575px)':{
+            height: '200px'
+         }
       }
    }
 }));

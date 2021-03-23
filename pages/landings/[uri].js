@@ -6,15 +6,11 @@ import { Row, Col, Container } from 'react-bootstrap';
 import BookerComponent from '@revenatium/revenatium-booker/dist/components/Booker';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
-import { Carousel, Stage, BannerInfo, WidgetContainer } from '../../partials';
+import { Carousel, Stage, BannerInfo, WidgetContainer, Gallery, Text, Section, Media } from '../../partials';
 import awsConfigure from '../../awsConfigure';
 import enums from '../../constants/enums';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-import Gallery from '../../partials/Gallery';
-import Text from '../../partials/Text';
-import Section from '../../partials/Section';
-import Media from '../../partials/Media';
 
 Amplify.configure({...awsConfigure, ssr: true});
 
@@ -143,30 +139,30 @@ export default function Banner({ landingData, bookerProps }) {
                   cols={cols}
                />
             )}
-            {(!landingData.banners || landingData.banners.items.length === 0)
-               && (
-                  <BannerInfo.Container
-                     keepAspectRatio={landingData.bannerKeepAspectRatio}
-                  >
-                     <Row>
-                        <Col {...cols}>
-                           <BannerInfo>
-                              {landingData.title && (
-                                 <BannerInfo.Title>
-                                    {landingData.title}
-                                 </BannerInfo.Title>
-                              )}
-                              {landingData.subTitle && (
-                                 <BannerInfo.subtitle>
-                                    {landingData.title}
-                                 </BannerInfo.subtitle>
-                              )}
-                           </BannerInfo>
-                        </Col>
-                     </Row>
-                  </BannerInfo.Container>
-               )
-            }
+            {(!landingData.banners || landingData.banners.items.length === 0) && (
+               <BannerInfo.Container
+                  keepAspectRatio={landingData.bannerKeepAspectRatio}
+                  bannerFullScreen={landingData.bannerFullScreen}
+                  isTop
+               >
+                  <Row>
+                     <Col {...cols}>
+                        <BannerInfo>
+                           {landingData.title && (
+                              <BannerInfo.Title>
+                                 {landingData.title}
+                              </BannerInfo.Title>
+                           )}
+                           {landingData.subTitle && (
+                              <BannerInfo.subtitle>
+                                 {landingData.title}
+                              </BannerInfo.subtitle>
+                           )}
+                        </BannerInfo>
+                     </Col>
+                  </Row>
+               </BannerInfo.Container>
+            )}
             <WidgetContainer 
                bannerFullScreen={landingData.bannerFullScreen}
                keepAspectRatio={landingData.bannerKeepAspectRatio}
