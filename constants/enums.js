@@ -12,6 +12,7 @@ export default {
       ROW: 'ROW',
       TEXT: 'TEXT',
       MEDIA: 'MEDIA',
-      VIDEO: 'VIDEO'
+      VIDEO: 'VIDEO',
+      CALL_TO_ACTION: 'CALL_TO_ACTION'
    }
 }

@@ -111,7 +111,7 @@ const Image = ({base, images, bucket, size, order}) => {
    );
 };
 
-const Info = ({title, content}) => {
+const Info = ({title, content, children}) => {
    const { fluid } = useMediaContext();
    let TagName = fluid ? MediaInfo : MediaInfoCol;
    return (
@@ -121,6 +121,7 @@ const Info = ({title, content}) => {
          )}
          <MediaInfoBody>
             <div dangerouslySetInnerHTML={{__html: content}} />
+            {children}
          </MediaInfoBody>
       </TagName>
    );

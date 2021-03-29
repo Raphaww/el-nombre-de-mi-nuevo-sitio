@@ -8,6 +8,7 @@ import Gallery from './Gallery';
 import Media from './Media';
 import Section from './Section';
 import Video from './Video';
+import CallToAction from './CallToAction';
 
 export {
    Header,
@@ -19,5 +20,6 @@ export {
    Gallery,
    Media,
    Section,
-   Video
+   Video,
+   CallToAction
 };

@@ -2,11 +2,11 @@ import React from 'react';
 import Amplify from '@aws-amplify/core';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container, Button } from 'react-bootstrap';
 import BookerComponent from '@revenatium/revenatium-booker/dist/components/Booker';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
-import { Carousel, Stage, BannerInfo, WidgetContainer, Gallery, Text, Section, Media, Video } from '../../partials';
+import { Carousel, Stage, BannerInfo, WidgetContainer, Gallery, Text, Section, Media, Video, CallToAction } from '../../partials';
 import awsConfigure from '../../awsConfigure';
 import enums from '../../constants/enums';
 import 'react-dates/initialize';
@@ -102,7 +102,13 @@ export default function Banner({ landingData, bookerProps }) {
                         images={component.images}
                         order={component.styleOptions && component.styleOptions.order > 0 ? component.styleOptions.order : 0 }
                      />
-                     <Media.Info title={component.title} content={component.content} />
+                     <Media.Info title={component.title} content={component.content}>
+                        { component.linkUrl && component.linkText && (
+                           <Button href={component.linkUrl} variant="outline-primary">
+                              {component.linkText}
+                           </Button>
+                        )}
+                     </Media.Info>
                   </Media>
                </Media.Container>
             );
@@ -110,6 +116,23 @@ export default function Banner({ landingData, bookerProps }) {
          case enums.componentType.VIDEO:
             result = (
                <Video videoId={component.videoId} />
+            );
+            break;
+         case enums.componentType.CALL_TO_ACTION:
+            result = (
+               <CallToAction
+                  base={base}
+                  bucket={bucket}
+                  images={component.images}
+                  title={component.title}
+                  content={component.content}
+               >
+               {component.linkUrl && (
+                  <Button href={component.linkUrl} variant="primary">
+                     {component.linkText || 'Click'}
+                  </Button>
+               )}
+               </CallToAction>
             );
             break;
          default:
