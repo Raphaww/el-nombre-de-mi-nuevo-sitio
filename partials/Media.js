@@ -1,10 +1,11 @@
 import React, { createContext, useContext } from 'react';
-import { Row } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import isPropValid from '@emotion/is-prop-valid';
 import variables from '../styled/variables';
 import styled from '@emotion/styled';
 
 const MediaContext = createContext({
-   fluid: true
+   fluid: false
 });
 
 function useMediaContext() {
@@ -17,7 +18,6 @@ function useMediaContext() {
    return context;
 };
 
-
 const RowStyled = styled(Row, {
    shouldForwardProp: prop =>
    prop !== 'fluid'
@@ -25,28 +25,23 @@ const RowStyled = styled(Row, {
    marginBottom: '2rem',
    backgroundColor: variables.listItemBgColor,
    color: variables.listItemColor,
+   marginRight: 0,
+   marginLeft: 0,
    ...fluid && {
       width: '100%'
    }
 }));
 
-const MediaImage = styled.div({
+const MediaImage = styled('div', {
+   shouldForwardProp: prop => prop !== 'fluid' && prop !== 'empty' && prop !== 'url'
+})(({url, empty, fluid}) => ({
    position: 'relative',
    backgroundSize: 'cover',
    backgroundColor: '#eee',
    backgroundPosition: 'center center',
    minHeight: '194px !important',
-}, ({base, path, bucket, empty, fluid}) => ({
-   ...empty ? {
-      textAlign: 'center',
-      display: 'block',
-      color: '#aaa',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%'
-   } : { 
-      backgroundImage: `url(${base}f_auto,h_400,c_fill/${bucket}/${path})`
+   ...!empty && { 
+      backgroundImage: `url(${url})`
    },
    ...fluid && {
       padding: '0 15px',
@@ -63,15 +58,20 @@ const MediaImage = styled.div({
    }}
 }));
 
-const MediaInfo = styled.div({
+const MediaImageCol = MediaImage.withComponent(Col);
+
+const MediaInfo = styled('div', {
+   shouldForwardProp: prop => prop !== 'fluid'
+})(({fluid}) => ({
    paddingTop: '15px',
-   paddingBottom: '15px'
-}, ({fluid}) => ({
+   paddingBottom: '15px',
    ...fluid && {
       width: '100%',
       padding: '20px'
    }
 }));
+
+const MediaInfoCol = MediaInfo.withComponent(Col);
 
 const MediaInfoBody = styled.div({
    margin: '0.5rem 0'
@@ -80,31 +80,49 @@ const MediaInfoBody = styled.div({
 const Media = ({ children }) => {
    const { fluid } = useMediaContext();
    return (
-      <RowStyled noGutters fluid={fluid}>
+      <RowStyled fluid={fluid}>
          {children}
       </RowStyled>
    );
 };
-const Image = ({base, images, bucket}) => {
+const Image = ({base, images, bucket, size, order}) => {
    const { fluid } = useMediaContext();
-   return (base && bucket && images && images.items.length > 0) ? (
-      <MediaImage base={base} path={images.items[0].path} bucket={bucket} fluid={fluid}/>
-   ) : (
-      <MediaImage empty fluid={fluid}/>
+   let TagName = fluid ? MediaImage : MediaImageCol;
+   const tagProps = {
+      fluid,
+      ...base && bucket && images && images.items.length > 0 ? {
+         url: `${base}f_auto,h_400,c_fill/${bucket}/${images.items[0].path}`
+      } : {
+         empty: true
+      },
+      ...!fluid && {
+         md: {
+            span: size || 4,
+            order
+         },
+         xs: {
+            span: 12,
+            order: 'first'
+         }
+      }
+   };
+   return (
+      <TagName {...tagProps} />
    );
 };
 
 const Info = ({title, content}) => {
    const { fluid } = useMediaContext();
+   let TagName = fluid ? MediaInfo : MediaInfoCol;
    return (
-      <MediaInfo fluid={fluid}>
+      <TagName fluid={fluid}>
          {title && (
             <h2>{title}</h2>
          )}
          <MediaInfoBody>
             <div dangerouslySetInnerHTML={{__html: content}} />
          </MediaInfoBody>
-      </MediaInfo>
+      </TagName>
    );
 };
 
@@ -121,7 +139,7 @@ Media.Info = Info;
 Media.Image = Image;
 
 Container.defaultProps = {
-   fluid: true
+   fluid: false
 };
 
 export default Media;

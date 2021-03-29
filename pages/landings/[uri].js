@@ -6,7 +6,7 @@ import { Row, Col, Container } from 'react-bootstrap';
 import BookerComponent from '@revenatium/revenatium-booker/dist/components/Booker';
 import Layout from '../../components/layout';
 import { getAllLandingsIds, getLandingData } from '../../lib/landings'
-import { Carousel, Stage, BannerInfo, WidgetContainer, Gallery, Text, Section, Media } from '../../partials';
+import { Carousel, Stage, BannerInfo, WidgetContainer, Gallery, Text, Section, Media, Video } from '../../partials';
 import awsConfigure from '../../awsConfigure';
 import enums from '../../constants/enums';
 import 'react-dates/initialize';
@@ -24,7 +24,7 @@ export default function Banner({ landingData, bookerProps }) {
       );
    }
 
-   const cols = {
+   const bannerCols = {
       xs: 12,
       ...landingData.bannerKeepAspectRatio && {
          sm: 9,
@@ -39,6 +39,7 @@ export default function Banner({ landingData, bookerProps }) {
          md: 12
       }
    };
+
    const drawComponent = (component, level = 0) => {
       let result = null;
       switch (component.type) {
@@ -56,7 +57,11 @@ export default function Banner({ landingData, bookerProps }) {
             const cols = [];
             {component.children
             && component.children.items.map(child => {
-               cols.push(drawComponent(child, level + 1));
+               cols.push(
+                  <React.Fragment key={child.id}>
+                     {drawComponent(child, level + 1)}
+                  </React.Fragment>
+               );
             })}
             result = (
                <React.Fragment>
@@ -84,21 +89,35 @@ export default function Banner({ landingData, bookerProps }) {
             }
             break;
          case enums.componentType.MEDIA:
+            const containerProps = {};
+            if(component.styleOptions){
+               containerProps.fluid = component.styleOptions.fixed; 
+            }
             result = (
-               <Media.Container>
+               <Media.Container {...containerProps}>
                   <Media>
-                     <Media.Image base={base} bucket={bucket} images={component.images} />
+                     <Media.Image
+                        base={base}
+                        bucket={bucket}
+                        images={component.images}
+                        order={component.styleOptions && component.styleOptions.order > 0 ? component.styleOptions.order : 0 }
+                     />
                      <Media.Info title={component.title} content={component.content} />
                   </Media>
                </Media.Container>
             );
             break;
+         case enums.componentType.VIDEO:
+            result = (
+               <Video videoId={component.videoId} />
+            );
+            break;
          default:
             break;
       }
-      
+
       return (
-         <Col key={component.id} {...component.size ? { lg: component.size } : null}>
+         <Col {...component.size ? { md: component.size } : null}>
             <Section level={level}>
                {result}
             </Section>
@@ -136,7 +155,7 @@ export default function Banner({ landingData, bookerProps }) {
                   }}
                   base={base}
                   bucket={bucket}
-                  cols={cols}
+                  cols={bannerCols}
                />
             )}
             {(!landingData.banners || landingData.banners.items.length === 0) && (
@@ -146,7 +165,7 @@ export default function Banner({ landingData, bookerProps }) {
                   isTop
                >
                   <Row>
-                     <Col {...cols}>
+                     <Col {...bannerCols}>
                         <BannerInfo>
                            {landingData.title && (
                               <BannerInfo.Title>
@@ -172,14 +191,22 @@ export default function Banner({ landingData, bookerProps }) {
                <BookerComponent {...bookerProps} />
             </WidgetContainer>
          </Stage>
-         <Container>
-            {landingData.components
-            && landingData.components.items.map(component => (
-               <Row key={component.id}>
-                  {drawComponent(component)}
-               </Row>
-            ))}
-         </Container>
+         {landingData.components
+         && landingData.components.items.map(component => {
+            let result = (
+               <Container fluid={component.notContained} {...component.notContained && {style:{padding: 0}}}>
+                  <Row noGutters={component.notContained}>
+                     {drawComponent(component)}
+                  </Row>
+               </Container>
+            );
+            
+            return (
+               <React.Fragment key={component.id}>
+                  {result}
+               </React.Fragment>
+            );
+         })}
       </Layout>
    );
 

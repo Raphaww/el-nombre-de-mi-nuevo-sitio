@@ -12,5 +12,6 @@ export default {
       ROW: 'ROW',
       TEXT: 'TEXT',
       MEDIA: 'MEDIA',
+      VIDEO: 'VIDEO'
    }
 }

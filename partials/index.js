@@ -7,6 +7,7 @@ import Text from './Text';
 import Gallery from './Gallery';
 import Media from './Media';
 import Section from './Section';
+import Video from './Video';
 
 export {
    Header,
@@ -17,5 +18,6 @@ export {
    Text,
    Gallery,
    Media,
-   Section
+   Section,
+   Video
 };
