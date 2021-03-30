@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
-import isPropValid from '@emotion/is-prop-valid';
+import { LazyLoadImage, trackWindowScroll } from 'react-lazy-load-image-component';
 import { css } from '@emotion/react';
+import 'react-lazy-load-image-component/src/effects/opacity.css';
 
-const GalleryLink = styled('a', {
-   shouldForwardProp: prop => isPropValid(prop)
-   && prop !== 'length' 
-})(({ length }) => ({
+const GalleryLink = styled.a({
    cursor: 'pointer',
    display: 'block',
    float: 'left',
@@ -14,12 +12,26 @@ const GalleryLink = styled('a', {
    position: 'relative',
    overflow: 'hidden',
    width: '25%',
-   img: {
-      width: '100%'
-   },
    ':first-of-type': {
       float: 'left',
       width: '50%'
+   },
+}, ({length, index }) => ({
+   img: {
+      width: '100%',
+      minHeight: index === 0 ? '120px': '58px',
+      '@media (min-width: 576px)': {
+         minHeight: index === 0 ? '179px': '88px'
+      },
+      '@media (min-width: 768px)': {
+         minHeight:  index === 0 ? '244px': '120px'
+      },
+      '@media (min-width: 992px)': {
+         minHeight:  index === 0 ? '330px': '163px'
+      },
+      '@media (min-width: 1200px)': {
+         minHeight: index === 0 ? '394px': '196px'
+      },
    },
    ...length === 3 && {
       width: '33.333%',
@@ -44,9 +56,10 @@ const GalleryCount = styled('span')({
    background: 'rgba(0,0,0,0.4)',
    color: '#fff',
    fontSize: '200%',
-   textAlign: 'center',
-   lineHeight: '150px',
-   whiteSpace: 'nowrap'
+   whiteSpace: 'nowrap',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center'
 });
 
 const Background = styled('div')({
@@ -272,7 +285,7 @@ function useKeyPress(callback) {
    }, []);
 }
 
-const Gallery = ({ base, bucket, images }) => {
+const Gallery = ({ base, bucket, images, scrollPosition }) => {
    const [currentPhotoIndex, _setCurrentPhotoIndex] = useState(-1);
    const currentPhotoIndexRef = useRef(currentPhotoIndex);
    const setCurrentPhotoIndex = (value) => {
@@ -325,8 +338,12 @@ const Gallery = ({ base, bucket, images }) => {
                size = 'w_300,h_215';
             }
             return (
-               <GalleryLink key={index} length={images.items.length} onClick={() => open(index)}>
-                  <img src={`${base}q_auto:low,f_auto,${size},c_fill/${bucket}/${image.path}`} />
+               <GalleryLink key={index} index={index} length={images.items.length} onClick={() => open(index)}>
+                  <LazyLoadImage
+                     effect="opacity"
+                     scrollPosition={scrollPosition}
+                     src={`${base}q_auto:low,f_auto,${size},c_fill/${bucket}/${image.path}`}
+                  />
                   {index === 4 && index !== (images.items.length - 1) && (
                      <GalleryCount>
                         + {images.items.length - 5}
@@ -366,4 +383,4 @@ const Gallery = ({ base, bucket, images }) => {
    );
 };
 
-export default Gallery;
+export default trackWindowScroll(Gallery);

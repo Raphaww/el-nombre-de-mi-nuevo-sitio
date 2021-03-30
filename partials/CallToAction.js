@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 const Styled = styled.div({
    padding: '4rem',
@@ -57,16 +58,29 @@ const CallToAction = ({title, content, children, base, bucket, images, theme}) =
          url: `${base}f_auto,w_1200,h_800,c_fill/${bucket}/${images.items[0].path}`
       }
    };
-
-   return (
-      <Styled {...actionProps}>
-         <StyledBody>
-            <h5>{title}</h5>
-            <p className="lead" dangerouslySetInnerHTML={{__html: content}} />
-            {children}
-         </StyledBody>
+   const body = (
+      <StyledBody>
+         <h5>{title}</h5>
+         <p className="lead" dangerouslySetInnerHTML={{__html: content}} />
+         {children}
+      </StyledBody>
+   );
+   const component = (
+      <Styled theme={theme}>
+         {body}
       </Styled>
    );
+
+   if(base && bucket && images && images.items.length > 0){
+      return (
+         <LazyLoadComponent placeholder={component}>
+            <Styled {...actionProps}>
+               {body}
+            </Styled>
+         </LazyLoadComponent>
+      );
+   }
+   return component;
 };
 
 CallToAction.defaultProps = {

@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import isPropValid from '@emotion/is-prop-valid';
 import variables from '../styled/variables';
 import styled from '@emotion/styled';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 const MediaContext = createContext({
    fluid: false
@@ -107,7 +108,9 @@ const Image = ({base, images, bucket, size, order}) => {
       }
    };
    return (
-      <TagName {...tagProps} />
+      <LazyLoadComponent placeholder={<TagName empty />}>
+         <TagName {...tagProps} />
+      </LazyLoadComponent>
    );
 };
 
